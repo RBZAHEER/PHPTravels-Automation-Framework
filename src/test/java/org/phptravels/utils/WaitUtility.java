@@ -44,4 +44,7 @@ public class WaitUtility {
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
+    public Boolean waitForInvisibility(WebElement element){
+        return wait.until(ExpectedConditions.invisibilityOf(element));
+    }
 }

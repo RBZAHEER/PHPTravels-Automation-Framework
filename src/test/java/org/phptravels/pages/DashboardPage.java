@@ -13,7 +13,7 @@ public class DashboardPage extends BasePage{
 
     //locators
     //1.Username on the page
-    @FindBy(xpath = "//button[.//span[normalize-space()='Demo User']]")
+    @FindBy(xpath = "//button//span[normalize-space()='Demo User']")
     private WebElement loggedInUser;
 
     //Actions

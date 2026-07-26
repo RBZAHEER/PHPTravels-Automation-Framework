@@ -25,16 +25,28 @@ public class HomePage extends BasePage{
     }
 
     //Locators
-    //1. Is Home Page Visible by its  url
+    //1. acknowledgeDemoWarning
+    @FindBy(id = "acknowledgeDemoWarning")
+    private WebElement ackBtn;
     //2. Login Btn
     @FindBy(xpath = "//a[contains(@href, 'login')]")
     private WebElement loginBtn;
 
     //Actions
+    public void clickAck(){
+        wait.waitForVisibility(ackBtn);
+
+        if(ackBtn.isDisplayed()){
+            ackBtn.click();
+
+        }
+        wait.waitForInvisibility(ackBtn);
+    }
     public LoginPage clickLogin() {
         wait.waitForClickable(loginBtn);
         loginBtn.click();
         return new LoginPage(driver);
     }
+
 
 }

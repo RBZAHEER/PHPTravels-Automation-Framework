@@ -21,9 +21,11 @@ public class LoginPage extends BasePage{
 
     //Actions
     public void enterEmail(String email){
+        wait.waitForVisibility(emailTextBox);
         emailTextBox.sendKeys(email);
     }
     public void enterPassword(String password){
+        wait.waitForVisibility(passwordTextBox);
         passwordTextBox.sendKeys(password);
     }
     public DashboardPage clickLoginBtn(){
