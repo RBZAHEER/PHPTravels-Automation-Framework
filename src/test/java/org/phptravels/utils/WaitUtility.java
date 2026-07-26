@@ -1,6 +1,5 @@
 package org.phptravels.utils;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -9,25 +8,40 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class WaitUtility {
+
+    // WebDriverWait instance used for all explicit waits
     private final WebDriverWait wait;
-        //Initialize with default timeout durations
-        public WaitUtility(WebDriver driver, int timeoutInSeconds){
-            this.wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
-        }
-        //Wait until element is present in DOM
-        public WebElement waitForPresence(By locator){
-            return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
-        }
 
-        //Wait for visibility
-        public WebElement waitForVisibility(By locator){
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        }
+    /**
+     * Constructor
+     *
+     * Initializes WebDriverWait with the timeout provided.
+     *
+     * @param driver Active WebDriver instance
+     * @param timeoutInSeconds Explicit wait timeout
+     */
+    public WaitUtility(WebDriver driver, int timeoutInSeconds) {
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
+    }
 
+    /**
+     * Wait until the element is visible on the page.
+     *
+     * @param element WebElement to wait for
+     * @return Visible WebElement
+     */
+    public WebElement waitForVisibility(WebElement element) {
+        return wait.until(ExpectedConditions.visibilityOf(element));
+    }
 
+    /**
+     * Wait until the element is clickable.
+     *
+     * @param element WebElement to wait for
+     * @return Clickable WebElement
+     */
+    public WebElement waitForClickable(WebElement element) {
+        return wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
 
-        //Wait for Clickable
-        public WebElement waitForClickable(WebElement element){
-            return wait.until(ExpectedConditions.elementToBeClickable(element));
-        }
 }
