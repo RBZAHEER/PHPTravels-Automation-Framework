@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.phptravels.utils.ConfigUtility;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class BaseTest {
         driver.get(ConfigUtility.getProperties("url"));
     }
 
+    @AfterMethod
     public void tearDown() {
         driver.quit();
     }

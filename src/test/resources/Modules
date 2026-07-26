@@ -1,0 +1,197 @@
+Modules
+
+We won't build everything at once.
+
+Instead, we'll build one module at a time.
+
+Module 1
+
+Project Setup
+
+Topics
+
+Create Maven Project
+Add Dependencies
+Folder Structure
+Git Ignore
+Config File
+Base Packages
+Module 2
+
+Driver Framework
+
+Topics
+
+DriverFactory
+ThreadLocal
+Browser Selection
+Headless Mode
+Browser Options
+Module 3
+
+Utilities
+
+Wait Utility
+JavaScript Utility
+Screenshot Utility
+Excel Utility
+Property Utility
+Module 4
+
+Base Classes
+
+BasePage
+BaseTest
+Module 5
+
+Login Module
+
+Pages
+
+HomePage
+
+↓
+
+LoginPage
+
+↓
+
+Dashboard
+
+We'll automate login.
+
+Module 6
+
+Hotel Search
+
+Learn
+
+Dynamic Dropdown
+
+Date Picker
+
+Guests
+
+Search
+
+Module 7
+
+Hotel Details
+
+Validate
+
+Hotel Name
+
+Price
+
+Facilities
+
+Images
+
+Module 8
+
+Booking
+
+Fill Guest Details
+
+Proceed
+
+Payment Page
+
+Booking Confirmation
+
+Assertions
+
+Module 9
+
+Logout
+
+Verify Session
+
+Module 10
+
+Data Driven Framework
+
+Excel
+
+DataProvider
+
+Multiple Users
+
+Multiple Hotels
+
+Module 11
+
+Reporting
+
+Extent
+
+Screenshot
+
+Logs
+
+Module 12
+
+Listeners
+
+ITestListener
+
+Retry
+
+Failure Handling
+
+Module 13
+
+Parallel Execution
+
+TestNG XML
+
+ThreadLocal
+
+Cross Browser
+
+Module 14
+
+Selenium Grid
+
+Hub
+
+Node
+
+Remote Execution
+
+Module 15
+
+Docker Selenium Grid
+
+Chrome
+
+Firefox
+
+Edge
+
+Parallel
+
+Module 16
+
+Jenkins
+
+Git Pull
+
+Maven Build
+
+Grid Execution
+
+Reports
+
+Module 17
+
+GitHub
+
+Professional README
+
+Screenshots
+
+Architecture Diagram
+
+Resume Description
