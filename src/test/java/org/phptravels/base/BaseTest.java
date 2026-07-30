@@ -44,7 +44,6 @@ public class BaseTest {
         driver.get(ConfigUtility.getProperties("url"));
     }
 
-    @AfterMethod
     public void tearDown() {
         driver.quit();
     }

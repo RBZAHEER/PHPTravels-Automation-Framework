@@ -1,9 +1,9 @@
 package org.phptravels.tests;
 
-import org.openqa.selenium.support.FindBy;
 import org.phptravels.base.BaseTest;
 import org.phptravels.pages.DashboardPage;
 import org.phptravels.pages.HomePage;
+import org.phptravels.pages.HotelSearchPage;
 import org.phptravels.pages.LoginPage;
 import org.phptravels.utils.ConfigUtility;
 import org.testng.Assert;
@@ -11,9 +11,10 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-public class LoginTest extends BaseTest {
-    @Test(invocationCount = 1)
-    public void verifyCustomerCanLoginSuccessfully() throws IOException {
+public class HotelSearchTest extends BaseTest {
+    @Test
+    public void verifyHotelSearch() throws IOException {
+        //Delete Later once TestNG added
         HomePage homePage = new HomePage(driver);
         homePage.clickAck();
         LoginPage loginPage = homePage.clickLogin();
@@ -24,7 +25,11 @@ public class LoginTest extends BaseTest {
         String username = dashboardPage.getUsername();
         Assert.assertEquals(username, ConfigUtility.getProperties("username"));
 
+        //verify Hotel Search
+
+        HotelSearchPage hotelSearchPage = new HotelSearchPage(driver);
+        hotelSearchPage.clickStays();
+        hotelSearchPage.selectDestination("Dubai");
+
     }
-
-
 }

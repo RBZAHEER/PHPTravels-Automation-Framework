@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class WaitUtility {
 
@@ -46,5 +47,20 @@ public class WaitUtility {
 
     public Boolean waitForInvisibility(WebElement element){
         return wait.until(ExpectedConditions.invisibilityOf(element));
+    }
+    /**
+     * Wait until all elements in the list are visible.
+     *
+     * Useful for dynamic search results such as:
+     * - Destination suggestions
+     * - Destination suggestions
+     * - Nationality suggestions
+     * - Hotel search results
+     *
+     * @param elements List of WebElements
+     * @return Visible list of WebElements
+     */
+    public List<WebElement> waitForVisibilityList(List<WebElement> elements) {
+        return wait.until(ExpectedConditions.visibilityOfAllElements(elements));
     }
 }

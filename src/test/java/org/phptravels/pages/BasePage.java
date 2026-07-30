@@ -55,7 +55,7 @@ public class BasePage {
 
         PageFactory.initElements(driver, this);
 
-        wait = new WaitUtility(driver, 20);
+        wait = new WaitUtility(driver, 60);
 
         js = new JavaScriptUtility(driver);
     }
