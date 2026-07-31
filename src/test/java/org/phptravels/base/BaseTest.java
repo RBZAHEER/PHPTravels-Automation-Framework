@@ -43,7 +43,6 @@ public class BaseTest {
         driver.manage().window().maximize();
         driver.get(ConfigUtility.getProperties("url"));
     }
-
     @AfterMethod
     public void tearDown() {
         driver.quit();
