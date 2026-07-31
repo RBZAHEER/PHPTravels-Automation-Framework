@@ -1,13 +1,18 @@
 package org.phptravels.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.security.PrivateKey;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 public class HotelSearchPage extends BasePage {
+
     public HotelSearchPage(WebDriver driver){
         super(driver);
     }
@@ -29,12 +34,12 @@ public class HotelSearchPage extends BasePage {
     //CheckIn and OUT
     @FindBy(name = "checkin_date")
     private WebElement checkInDate;
-    @FindBy(xpath = "//th[@contains(@class, 'prev']")
+    @FindBy(xpath = "//th[@contains(@class, 'prev')]")
     private WebElement previousMonthButton;
     @FindBy(xpath = "//th[contains(@class,'next')]")
     private WebElement nextMonthButton;
-    @FindBy(xpath = "//th[contains(@class,'switch')]")
-    private WebElement monthYearHeader;
+    @FindBy(xpath = "//div[contains(@class,'datepicker-days')]//th[contains(@class,'switch')]")
+    private List<WebElement> monthYearHeader;
     @FindBy(xpath = "//div[contains(@class,'day')]")
     private List<WebElement> allDays;
 
@@ -103,15 +108,21 @@ public class HotelSearchPage extends BasePage {
             }
         }
     }
-    public void selectCheckInDate(LocalDate date){
+
+
+
+    public void selectCheckInDate(LocalDate date) {
         wait.waitForClickable(checkInDate);
         checkInDate.click();
-
+        WebElement nextButton = getVisibleNextButton();
+        wait.waitForVisibility(nextButton);
+        navigateToMonth(date);
+        clickTargetDay(date);
 
     }
     public void selectCheckOutDate(LocalDate date){
-        wait.waitForClickable(checkoutDate);
-        checkoutDate.click();
+        navigateToMonth(date);
+        clickTargetDay(date);
     }
     public void selectGuests(int adults, int children){
         wait.waitForClickable(guestsTrigger);
@@ -133,5 +144,69 @@ public class HotelSearchPage extends BasePage {
         clickSearchBtn.click();
     }
 
+    private String getDisplayedMonthYear() {
 
+        List<WebElement> headers = driver.findElements(
+                By.xpath("//div[contains(@class,'datepicker')]//th[contains(@class,'switch')]")
+        );
+
+        for (WebElement header : headers) {
+
+            if (header.isDisplayed()) {
+                return header.getText().trim();
+            }
+
+        }
+
+        throw new RuntimeException("No visible calendar header found.");
+    }
+
+    private void navigateToMonth(LocalDate date) {
+
+        String targetMonth =
+                date.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH)
+                        + " "
+                        + date.getYear();
+
+        String currentMonth = getDisplayedMonthYear();
+
+        while (!currentMonth.equals(targetMonth)) {
+
+            WebElement nextButton = getVisibleNextButton();
+            nextButton.click();
+
+            currentMonth = getDisplayedMonthYear();
+        }
+    }
+    private WebElement getVisibleNextButton(){
+        List<WebElement> nextButtons = driver.findElements(By.xpath("//th[contains(@class,'next')]"));
+        for(WebElement button : nextButtons){
+//            System.out.println("--------------------");
+//            System.out.println("Displayed : " + button.isDisplayed());
+//            System.out.println("HTML : " + button.getAttribute("outerHTML"));
+            if(button.isDisplayed()){
+                return button;
+            }
+        }
+        throw new RuntimeException("Visible next button not found");
+    }
+
+    private void clickTargetDay(LocalDate date){
+        int targetDay = date.getDayOfMonth();
+
+        for(WebElement day : allDays) {
+            if (!day.isDisplayed()) {
+                continue;
+            }
+
+            String dayText = day.getText().trim();
+
+            if (dayText.equals(String.valueOf(targetDay))) {
+                wait.waitForClickable(day);
+                day.click();
+                return;
+            }
+        }
+        throw new RuntimeException("Target Day " + targetDay + "not found");
+    }
 }

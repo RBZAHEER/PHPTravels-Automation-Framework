@@ -10,6 +10,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class HotelSearchTest extends BaseTest {
     @Test
@@ -30,6 +31,10 @@ public class HotelSearchTest extends BaseTest {
         HotelSearchPage hotelSearchPage = new HotelSearchPage(driver);
         hotelSearchPage.clickStays();
         hotelSearchPage.selectDestination("Dubai");
+
+
+        hotelSearchPage.selectCheckInDate(LocalDate.of(2026,10,20));
+        hotelSearchPage.selectCheckOutDate(LocalDate.of(2026, 10, 25));
 
     }
 }
