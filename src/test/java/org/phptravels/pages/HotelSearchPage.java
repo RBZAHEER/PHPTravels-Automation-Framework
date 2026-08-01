@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.phptravels.utils.WaitUtility;
 
 import java.security.PrivateKey;
 import java.time.LocalDate;
@@ -27,8 +28,9 @@ public class HotelSearchPage extends BasePage {
     private WebElement destinationTrigger;
     @FindBy(id = "st_dest_q")
     private WebElement destinationSearchBox;
-    @FindBy(xpath = "//span[@x-text = 'd.airportname || d.name']")
-    private List<WebElement> destinationSuggestions;
+//    @FindBy(xpath = "//span[@x-text = 'd.airportname || d.name']")
+//    private List<WebElement> destinationSuggestions;
+    private final By destinationSuggestions = By.xpath("//span[@x-text = 'd.airportname || d.name']");
 
 
     //CheckIn and OUT
@@ -53,18 +55,21 @@ public class HotelSearchPage extends BasePage {
     // ======================================================
     @FindBy(id = "st_guests_trigger")
     private WebElement guestsTrigger;
-    @FindBy(xpath = "//div[normalize-space()='Adults']/ancestor::div[contains(@class,'justify-between')]//button[2]")
-    private WebElement adultIncreaseBtn;
-    @FindBy(xpath = "//div[normalize-space()='Adults']/ancestor::div[contains(@class,'justify-between')]//button[1]")
-    private WebElement adultDecreaseBtn;
-    @FindBy(xpath = "//span[@x-text='room.adults']")
+    @FindBy(xpath = "//*[@id='st_guests_panel']//span[@x-text='room.adults']")
     private WebElement adultCount;
-    @FindBy(xpath = "//div[normalize-space()='Children']/ancestor::div[contains(@class,'justify-between')]//button[2]")
-    private WebElement childrenIncreaseBtn;
-    @FindBy(xpath = "//div[normalize-space()='Children']/ancestor::div[contains(@class,'justify-between')]//button[1]")
-    private WebElement childrenDecreaseBtn;
     @FindBy(xpath = "//span[@x-text='room.children']")
     private WebElement childrenCount;
+    private final By adultIncreaseLocator =
+            By.xpath("//div[normalize-space()='Adults']/ancestor::div[contains(@class,'justify-between')]//button[2]");
+
+    private final By adultDecreaseLocator =
+            By.xpath("//div[normalize-space()='Adults']/ancestor::div[contains(@class,'justify-between')]//button[1]");
+
+    private final By childrenIncreaseLocator =
+            By.xpath("//div[normalize-space()='Children']/ancestor::div[contains(@class,'justify-between')]//button[2]");
+
+    private final By childrenDecreaseLocator =
+            By.xpath("//div[normalize-space()='Children']/ancestor::div[contains(@class,'justify-between')]//button[1]");
     // TODO: Add after inspection
 
     // ======================================================
@@ -98,9 +103,16 @@ public class HotelSearchPage extends BasePage {
         wait.waitForClickable(destinationSearchBox);
         destinationSearchBox.sendKeys(destination);
 
-        wait.waitForVisibilityList(destinationSuggestions);
+        List<WebElement> suggestions = driver.findElements(destinationSuggestions);
 
-        for(WebElement suggestion : destinationSuggestions){
+
+        for(WebElement suggestion : suggestions){
+            System.out.println("----------------");
+
+            System.out.println("Displayed : " + suggestion.isDisplayed());
+
+            System.out.println("Text : " + suggestion.getText());
+
             if(suggestion.getText().trim().equalsIgnoreCase(destination)){
                 System.out.println(suggestion.getText());
                 suggestion.click();
@@ -114,8 +126,9 @@ public class HotelSearchPage extends BasePage {
     public void selectCheckInDate(LocalDate date) {
         wait.waitForClickable(checkInDate);
         checkInDate.click();
-        WebElement nextButton = getVisibleNextButton();
-        wait.waitForVisibility(nextButton);
+//        WebElement nextButton = getVisibleNextButton();
+//        wait.waitForVisibility(nextButton);
+        getVisibleNextButton();
         navigateToMonth(date);
         clickTargetDay(date);
 
@@ -124,9 +137,54 @@ public class HotelSearchPage extends BasePage {
         navigateToMonth(date);
         clickTargetDay(date);
     }
-    public void selectGuests(int adults, int children){
+    public void selectGuests(int targetAdultCount, int targetChildCount){
+//        System.out.println("URL : " + driver.getCurrentUrl());
+//        System.out.println("Contains Guests Trigger : " + driver.getPageSource().contains("st_guests_trigger"));
+//        System.out.println("Displayed: " +guestsTrigger.isDisplayed());
+//        System.out.println("enabled" + guestsTrigger.isEnabled() );
+//        js.scrollIntoView(guestsTrigger);
         wait.waitForClickable(guestsTrigger);
+//        System.out.println("Clicking Guests Trigger");
         guestsTrigger.click();
+//        System.out.println("Guests Trigger Clicked");
+
+        //Read Current adults
+        int currentAdultCount = getCurrentAdultCount();
+        while(currentAdultCount < targetAdultCount ){
+            WebElement increaseAdultBtn = getVisibleElement(adultIncreaseLocator);
+            wait.waitForClickable(increaseAdultBtn);
+            increaseAdultBtn.click();
+            wait.waitForTextToChange(adultCount, String.valueOf(currentAdultCount));
+            currentAdultCount = getCurrentAdultCount();
+        }
+        while (currentAdultCount > targetAdultCount){
+            WebElement decreaseAdultBtn = getVisibleElement(adultDecreaseLocator);
+            wait.waitForClickable(decreaseAdultBtn);
+            decreaseAdultBtn.click();
+            wait.waitForTextToChange(adultCount, String.valueOf(currentAdultCount));
+            currentAdultCount = getCurrentAdultCount();
+        }
+
+        //Read Current Children
+        int currentChildCount = getCurrentChildCount();
+
+        while(currentChildCount < targetChildCount ){
+            WebElement increaseChildBtn = getVisibleElement(childrenIncreaseLocator);
+
+            wait.waitForClickable(increaseChildBtn);
+            increaseChildBtn.click();
+            wait.waitForTextToChange(childrenCount, String.valueOf(currentChildCount));
+
+            currentChildCount = getCurrentChildCount();
+        }
+        while (currentChildCount > targetChildCount){
+            WebElement decreaseChildBtn = getVisibleElement(childrenDecreaseLocator);
+            wait.waitForClickable(decreaseChildBtn);
+            decreaseChildBtn.click();
+            wait.waitForTextToChange(childrenCount, String.valueOf(currentChildCount));
+
+            currentChildCount = getCurrentChildCount();
+        }
 
     }
     public void selectNationality(String country){
@@ -137,13 +195,25 @@ public class HotelSearchPage extends BasePage {
         nationalitySearchBox.sendKeys(country);
 
         wait.waitForVisibilityList(nationalitySuggestions);
-
+        for(WebElement nation : nationalitySuggestions){
+            if(nation.getText().trim().equalsIgnoreCase(country)){
+                System.out.println(nation.getText());
+                nation.click();
+                break;
+            }
+        }
     }
-    public void clickSearch(){
+    public HotelListingPage clickSearch(){
         wait.waitForClickable(clickSearchBtn);
         clickSearchBtn.click();
+
+        return new HotelListingPage(driver);
     }
 
+
+
+
+    ////Helpers !!!!
     private String getDisplayedMonthYear() {
 
         List<WebElement> headers = driver.findElements(
@@ -179,16 +249,17 @@ public class HotelSearchPage extends BasePage {
         }
     }
     private WebElement getVisibleNextButton(){
-        List<WebElement> nextButtons = driver.findElements(By.xpath("//th[contains(@class,'next')]"));
-        for(WebElement button : nextButtons){
-//            System.out.println("--------------------");
-//            System.out.println("Displayed : " + button.isDisplayed());
-//            System.out.println("HTML : " + button.getAttribute("outerHTML"));
-            if(button.isDisplayed()){
-                return button;
-            }
-        }
-        throw new RuntimeException("Visible next button not found");
+//        List<WebElement> nextButtons = driver.findElements(By.xpath("//th[contains(@class,'next')]"));
+//        for(WebElement button : nextButtons){
+////            System.out.println("--------------------");
+////            System.out.println("Displayed : " + button.isDisplayed());
+////            System.out.println("HTML : " + button.getAttribute("outerHTML"));
+//            if(button.isDisplayed()){
+//                return button;
+//            }
+//        }
+
+        return wait.waitForVisibleElement(By.xpath("//th[contains(@class,'next')]"));
     }
 
     private void clickTargetDay(LocalDate date){
@@ -209,4 +280,37 @@ public class HotelSearchPage extends BasePage {
         }
         throw new RuntimeException("Target Day " + targetDay + "not found");
     }
+
+    private int getCurrentAdultCount(){
+        System.out.println(adultCount.getAttribute("outerHTML"));
+        System.out.println(adultCount.getText());
+        return Integer.parseInt(adultCount.getText());
+    }
+
+    private int getCurrentChildCount(){
+        return Integer.parseInt(childrenCount.getText());
+    }
+
+    private WebElement getVisibleElement(By locator){
+        List <WebElement> elements = driver.findElements(locator);
+        for(WebElement element : elements){
+            if(element.isDisplayed()){
+                return element;
+            }
+        }
+        throw new RuntimeException("Visible Element not found.: " + locator);
+    }
+    private WebElement getVisibleAdultNextBtn(){
+        List<WebElement> nextBtns = driver.findElements(By.xpath("//div[normalize-space()='Adults']/ancestor::div[contains(@class,'justify-between')]//button[2]"));
+        for(WebElement nextBtn :nextBtns ){
+            if(nextBtn.isDisplayed()){
+                return nextBtn;
+            }
+        }
+        throw new RuntimeException("Visible Adult Increase button not found.");
+
+
+    }
+
+
 }

@@ -27,7 +27,7 @@ public class HotelSearchTest extends BaseTest {
         Assert.assertEquals(username, ConfigUtility.getProperties("username"));
 
         //verify Hotel Search
-
+//
         HotelSearchPage hotelSearchPage = new HotelSearchPage(driver);
         hotelSearchPage.clickStays();
         hotelSearchPage.selectDestination("Dubai");
@@ -36,5 +36,11 @@ public class HotelSearchTest extends BaseTest {
         hotelSearchPage.selectCheckInDate(LocalDate.of(2026,10,20));
         hotelSearchPage.selectCheckOutDate(LocalDate.of(2026, 10, 25));
 
+        //Click Guests
+        hotelSearchPage.selectGuests(3,0);
+
+        //Select nationality
+        hotelSearchPage.selectNationality("united Arab Emirates");
+        hotelSearchPage.clickSearch();
     }
 }
