@@ -1,5 +1,6 @@
 package org.phptravels.utils;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -63,4 +64,32 @@ public class WaitUtility {
     public List<WebElement> waitForVisibilityList(List<WebElement> elements) {
         return wait.until(ExpectedConditions.visibilityOfAllElements(elements));
     }
+
+    public WebElement waitForVisibleElement(By locator) {
+
+        return wait.until(driver -> {
+
+            // Find all matching elements
+            List<WebElement> elements = driver.findElements(locator);
+
+            // Return the first visible one
+            for (WebElement element : elements) {
+
+                if (element.isDisplayed()) {
+                    return element;
+                }
+
+            }
+
+            // Returning null tells WebDriverWait:
+            // "Condition not satisfied yet, keep polling."
+            return null;
+        });
+    }
+    public void waitForTextToChange(WebElement element, String oldValue) {
+        wait.until(ExpectedConditions.not(
+                ExpectedConditions.textToBePresentInElement(element, oldValue)
+        ));
+    }
+
 }
