@@ -91,5 +91,8 @@ public class WaitUtility {
                 ExpectedConditions.textToBePresentInElement(element, oldValue)
         ));
     }
+    public void urlContains(String url) {
+        wait.until(ExpectedConditions.urlContains(url));
+    }
 
 }

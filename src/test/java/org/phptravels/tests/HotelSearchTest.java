@@ -1,10 +1,7 @@
 package org.phptravels.tests;
 
 import org.phptravels.base.BaseTest;
-import org.phptravels.pages.DashboardPage;
-import org.phptravels.pages.HomePage;
-import org.phptravels.pages.HotelSearchPage;
-import org.phptravels.pages.LoginPage;
+import org.phptravels.pages.*;
 import org.phptravels.utils.ConfigUtility;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -42,5 +39,18 @@ public class HotelSearchTest extends BaseTest {
         //Select nationality
         hotelSearchPage.selectNationality("united Arab Emirates");
         hotelSearchPage.clickSearch();
+        //Hotel Listing Page
+        HotelListingPage hotelListingPage = new HotelListingPage(driver);
+
+        Assert.assertTrue(hotelListingPage.isHotelListingDisplayed());
+
+        Assert.assertTrue(hotelListingPage.isSearchResultDisplayed());
+
+        Assert.assertTrue(hotelListingPage.areHotelCardsDisplayed());
+
+        hotelListingPage.printHotelNames();
+
+        HotelDetailsPage hotelDetailsPage =
+                hotelListingPage.clickFirstHotel();
     }
 }

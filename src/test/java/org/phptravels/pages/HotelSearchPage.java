@@ -79,8 +79,8 @@ public class HotelSearchPage extends BasePage {
     private WebElement nationalityTrigger;
     @FindBy(id = "st_nat_q")
     private WebElement nationalitySearchBox;
-    @FindBy(xpath = "//div[@id = 'st_nat_panel']//div[contains(@class, 'cursor-pointer')]")
-    private List<WebElement> nationalitySuggestions;
+    private final By nationalitySuggestions =
+            By.xpath("//div[@id='st_nat_panel']//div[contains(@class,'cursor-pointer')]//span[contains(@class, 'text-sm')]");
     // TODO: Add after inspection
 
     // ======================================================
@@ -102,6 +102,7 @@ public class HotelSearchPage extends BasePage {
 
         wait.waitForClickable(destinationSearchBox);
         destinationSearchBox.sendKeys(destination);
+        wait.waitForVisibleElement(destinationSuggestions);
 
         List<WebElement> suggestions = driver.findElements(destinationSuggestions);
 
@@ -194,11 +195,28 @@ public class HotelSearchPage extends BasePage {
         wait.waitForVisibility(nationalitySearchBox);
         nationalitySearchBox.sendKeys(country);
 
-        wait.waitForVisibilityList(nationalitySuggestions);
-        for(WebElement nation : nationalitySuggestions){
-            if(nation.getText().trim().equalsIgnoreCase(country)){
-                System.out.println(nation.getText());
+        wait.waitForVisibleElement(nationalitySuggestions);
+        List<WebElement> suggestions = driver.findElements(nationalitySuggestions);
+//        for(WebElement nation : suggestions){
+//            if(nation.getText().trim().equalsIgnoreCase(country)){
+//                System.out.println(nation.getText());
+//                nation.click();
+//                break;
+//            }
+//        }
+
+        for (WebElement nation : suggestions) {
+
+            System.out.println("--------------------");
+            System.out.println("Displayed : " + nation.isDisplayed());
+            System.out.println("Text      : '" + nation.getText() + "'");
+
+            if (nation.getText().trim().equalsIgnoreCase(country)) {
+
+                System.out.println("FOUND -> " + nation.getText());
+
                 nation.click();
+
                 break;
             }
         }
