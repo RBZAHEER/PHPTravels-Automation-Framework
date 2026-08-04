@@ -55,9 +55,19 @@ public class BasePage {
 
         PageFactory.initElements(driver, this);
 
-        wait = new WaitUtility(driver, 60);
+        wait = new WaitUtility(driver, 20);
 
         js = new JavaScriptUtility(driver);
+    }
+
+    protected void switchToNewTab(){
+        String currentWindow = driver.getWindowHandle();
+        for(String window : driver.getWindowHandles()){
+            if(!window.equals(currentWindow)){
+                driver.switchTo().window(window);
+                break;
+            }
+        }
     }
 
 

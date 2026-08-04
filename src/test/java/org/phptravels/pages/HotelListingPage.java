@@ -67,6 +67,7 @@ public class HotelListingPage extends BasePage{
         wait.waitForClickable(moreDetailsButtons.get(0));
         moreDetailsButtons.get(0).click();
         System.out.println("Clikdedddd");
+        switchToNewTab();
         return new HotelDetailsPage(driver);
     }
 
