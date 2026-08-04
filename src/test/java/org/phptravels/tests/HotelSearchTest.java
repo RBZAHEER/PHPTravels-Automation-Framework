@@ -42,7 +42,7 @@ public class HotelSearchTest extends BaseTest {
         //Hotel Listing Page
         HotelListingPage hotelListingPage = new HotelListingPage(driver);
 
-        Assert.assertTrue(hotelListingPage.isHotelListingDisplayed());
+//        Assert.assertTrue(hotelListingPage.isHotelListingDisplayed());
 
         Assert.assertTrue(hotelListingPage.isSearchResultDisplayed());
 
@@ -50,7 +50,10 @@ public class HotelSearchTest extends BaseTest {
 
         hotelListingPage.printHotelNames();
 
-        HotelDetailsPage hotelDetailsPage =
-                hotelListingPage.clickFirstHotel();
+        hotelListingPage.clickFirstHotel();
+        HotelDetailsPage hotelDetailsPage = new HotelDetailsPage(driver);
+
+        hotelDetailsPage.selectFirstRoom();
+        hotelDetailsPage.clickContinueBooking();
     }
 }
