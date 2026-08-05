@@ -7,4 +7,5 @@ public class PaymentPage extends BasePage {
     public PaymentPage(WebDriver driver){
         super(driver);
     }
+
 }

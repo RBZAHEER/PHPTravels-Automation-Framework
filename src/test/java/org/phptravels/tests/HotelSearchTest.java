@@ -55,5 +55,11 @@ public class HotelSearchTest extends BaseTest {
 
         hotelDetailsPage.selectFirstRoom();
         hotelDetailsPage.clickContinueBooking();
+
+        //Booking Page
+
+        BookingPage bookingPage = new BookingPage(driver);
+        bookingPage.acceptTermsAndConditions();
+        bookingPage.clickConfirmBooking();
     }
 }

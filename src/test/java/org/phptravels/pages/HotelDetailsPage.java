@@ -20,8 +20,8 @@ public class HotelDetailsPage extends BasePage{
 
     private final By selectBtns =
         By.xpath("//td[contains(@class,'text-center')]//button");
-    @FindBy(xpath = "//button[contains(.,'Continue Booking')]")
-    private WebElement countinueBookingBtn;
+    private final By continueBookingBtn =
+            By.xpath("//button[contains(.,'Continue Booking')]");
 
 
 
@@ -44,15 +44,14 @@ public class HotelDetailsPage extends BasePage{
     }
 
 
-    public PaymentPage clickContinueBooking() {
+    public BookingPage clickContinueBooking() {
 
-//        WebElement button = wait.waitForVisibleElement(continueBookingBtn);
-//
-//        wait.waitForClickable(button);
-//        button.click();
+        WebElement button = wait.waitForVisibleElement(continueBookingBtn);
+        wait.waitForClickable(button);
+        button.click();
 
-        System.out.println("Payment Page");
-        return new PaymentPage(driver);
+        System.out.println("Booking Page");
+        return new BookingPage(driver);
     }
 
 }
